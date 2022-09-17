@@ -6,7 +6,7 @@
 
 import requests
 
-ow_api_key = "32ea6a05089121746429d564524dea67"  # global variable for Open Weather API Key to be pulled as needed
+ow_api_key = "Can demonstrate working code as needed"  # removed API Key to avoid security issues
 
 
 def choose_temp():  # here we decide what units we want, and then pass it to the api string
