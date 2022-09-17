@@ -1,0 +1,202 @@
+---
+title: "DSC530_TermProject_jMadsen"
+output: html_document
+date: '`r Sys.Date()`'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+```{r}
+
+# I chose to do the term project in R since I'm more comfortable with it over
+# Jupyter Notebook
+
+# import the boys
+library(ggplot2)
+library(qqplotr)
+
+## location of data
+# stock_index - https://www.kaggle.com/mattiuzc/stock-exchange-data?select=indexProcessed.csv
+# 14 stock exchanges since 1966 and their (almost) daily value.
+
+## Set the working directory to the root of your DSC 520 directory
+# used Mac formatting on this one since I'm on a business trip
+setwd("~/Documents/GitHub/ThinkStats2/")
+
+# pull in the data set
+stock_index <- read.csv("code/indexProcessed.csv")
+
+## time for some spring cleaning
+# I only care about the US exchange
+nya.subset <- subset(stock_index, Index == "NYA")
+# I'm looking for trade volume records, so anything at 0 isn't helpful for me.
+nya.subset <- subset(nya.subset, Volume > "0")
+# let's drop some unneeded columns. We already know it's US, so let's drop NYA
+# the data is in USD, so columns converting to USD don't add value
+nya.subset <- subset(nya.subset, select = -c(Index, Adj.Close, CloseUSD))
+
+# let's create some vectors for the different variables
+nya.open <- nya.subset$Open
+nya.high <- nya.subset$High
+nya.low <- nya.subset$Low
+nya.close <- nya.subset$Close
+nya.volume <- nya.subset$Volume
+
+# make some pretty histogram
+hist(nya.open)
+hist(nya.high)
+hist(nya.low)
+hist(nya.close)
+hist(nya.volume)
+
+# no inbuilt mode function in R, so let's make it happen cap'n
+getmode <- function(v) {
+   uniqv <- unique(v)
+   uniqv[which.max(tabulate(match(v, uniqv)))]
+}
+
+# let's grab some means and modes
+mean(nya.open)
+getmode(nya.open)
+
+mean(nya.high)
+getmode(nya.high)
+
+mean(nya.low)
+getmode(nya.low)
+
+mean(nya.close)
+getmode(nya.close)
+
+mean(nya.volume)
+getmode(nya.volume)
+
+# box plots for outlier detection
+boxplot(nya.open,
+  ylab = "Price Open",
+  main = "Boxplot of NYA Open"
+)
+
+boxplot(nya.high,
+  ylab = "Price High",
+  main = "Boxplot of NYA High"
+)
+
+boxplot(nya.low,
+  ylab = "Price Low",
+  main = "Boxplot of NYA Low"
+)
+
+boxplot(nya.close,
+  ylab = "Price Close",
+  main = "Boxplot of NYA Close"
+  
+)
+boxplot(nya.volume,
+  ylab = "Trade Volume",
+  main = "Boxplot of NYA Volume"
+)
+
+# Here we can see there are some outliers in only the NYA Volume
+outliers.volume <- boxplot.stats(nya.volume)$out
+outliers.volume
+
+# let's get the variance
+var.open <- var(nya.open) # 6737158
+var.high <- var(nya.high) # 6775766
+var.low <- var(nya.low) # 6695707
+var.close <- var(nya.close) # 6738344
+var.volume <- var(nya.volume) # 2.215951e+18
+
+var.open
+var.high
+var.low
+var.close
+var.volume
+
+# let's get the standard deviation
+sd.open <- sd(nya.open) # 2695.6
+sd.high <- sd(nya.high) # 2603.03
+sd.low <- sd(nya.low) # 2587.6
+sd.close <- sd(nya.close) # 2595.8
+sd.volume <- sd(nya.volume) # 1488607001
+
+## volume of trades when close is < open // > open
+# let's create a new column in the main data frame to identify the price movement
+nya.subset$movement <- ifelse(nya.subset$Close > nya.subset$Open, 3,
+                ifelse(nya.subset$Close < nya.subset$Open, 2, 1))
+
+# 1 is no change, 2 is decrease in price, 3 is increase in price
+
+# time to check for occurences
+table(nya.subset$movement)
+
+# let's grab some probabilities for increase and decrease
+increase <- nya.subset$movement == '3'
+decrease <- nya.subset$movement == '2'
+table(increase) # 2528
+table(decrease) # 2083
+length(increase) # 5115
+probability.increase <- 2528 / 5115 # 0.4942326
+probability.decrease <- 2083 / 5115 # 0.4072336
+
+# pmf for increase
+plot(1:4, dbinom(1:4, size=4, prob=0.4942326),type='s')
+# pmf for decrease
+plot(1:4, dbinom(1:4, size=4, prob=0.4072336),type='s')
+
+# let's do some CDF
+sample.data = rnorm(100)
+probability.cdf = ecdf(nya.subset$movement)
+plot(probability.cdf, xlab='X', ylab='CDF', main='CDF of Price Movement')
+
+mean.volume <- mean(nya.volume)
+
+random_values = rnorm(200, mean = mean.volume, sd = sd.volume)
+ 
+# Normal probability plot of movement
+ggplot(mapping = aes(sample = random_values)) + stat_qq_point(size = .5) + xlab("sample values") + ylab("standard normal sample")
+
+# normal probability plot doesn't handle the volume well. Pareto might have been a
+# better choice due to the high values used.
+
+# I'm starting to wonder if I picked a bad data set, or if I just didn't understand
+# the material well enough for this. Plan to reengage a non-textbook tutorial series.
+
+nya.movement <- nya.subset$movement
+
+# 1 is no change, 2 is decrease in price, 3 is increase in price
+
+# this plot shows that there are more trades made when the exchange price decreases
+plot(x = nya.movement, nya.volume, main = "nya.subset", xlab = "Price Movement", 
+     ylab = "Purchase Volume")
+
+# this plot shows that stocks do indeed go up over time // strong correlation
+plot(x = nya.open, nya.close, main = "nya.subset", xlab = "Open Price", 
+     ylab = "Close")
+
+# hypothesis test that volume is higher when stocks go down
+nya.subset.increase <- subset(nya.subset, movement == "3")
+nya.subset.decrease <- subset(nya.subset, movement == "2")
+
+increase.mean <- mean(nya.subset.increase$Volume)
+decrease.mean <- mean(nya.subset.decrease$Volume)
+
+increase.mean # 3450869711
+decrease.mean # 3628344095
+
+mean.difference <- decrease.mean - increase.mean
+mean.difference # 177474384
+
+# There are 177,474,364 more trades when the price ends lower than it started
+# on any given day
+
+ggplot(nya.subset, aes(x=Low, y=Open)) + 
+  geom_point() + geom_smooth(method=lm, se=FALSE)
+
+```
+
