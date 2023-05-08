@@ -7,4 +7,4 @@ Here's a [thing](Bank_Loan_Modelling.md)
 
 [test](https://github.com/SaiSolutions-Py/SaiSolutions-Py.github.io/tree/main)
 
-[NYA_rmd](NYA_Statistics_Analysis.rmd)
+[NYA_rmd](NYA_Statistics_Analysis.Rmd)
