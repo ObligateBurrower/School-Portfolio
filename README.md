@@ -6,3 +6,5 @@ I may add to this as I complete further projects, or create a more comprehensive
 Here's a [thing](Bank_Loan_Modelling.md)
 
 [test](https://github.com/SaiSolutions-Py/SaiSolutions-Py.github.io/tree/main)
+
+[NYA](NYA_Statistics_Analysis.md)
