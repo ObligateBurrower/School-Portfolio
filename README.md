@@ -7,7 +7,7 @@ Here's a [model](Bank_Loan_Modelling.md) I built to determine the likelihood som
 
 Here's an [analysis](Big_Mac_Index_Analysis.Rmd) on US market trends vs the price of a Big Mac.
 
-I developed a fairly basic [Ethereum price forecast tool](Ethereum_Forecast.md) using FB Prophet.
+I developed a fairly basic [Ethereum price forecast tool](Ethereum_Forecast.ipynb) using FB Prophet.
 
 Here's an [analysis on how trade volume impacts the price of the US Stock Exchange](NYA_Statistics_Analysis.Rmd).
 
