@@ -1,0 +1,184 @@
+---
+title: "TermProject_jMadsen"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+
+## R Markdown
+
+```{r}
+# import the boys
+library(ggplot2)
+library(tidyverse)
+library(knitr)
+
+## location of data
+# big_mac - https://github.com/TheEconomist/big-mac-data/blob/master/source-data/big-mac-source-data.csv
+# Price of Big Macs over the last 20 years, as collected by the Economist around the world.
+
+# gep_data - https://datacatalog.worldbank.org/search/dataset/0037888/Global-Economic-Prospects
+# World Bank's semi-annual publication on the world economy, provides several years of forecasted growth
+
+# stock_index - https://www.kaggle.com/mattiuzc/stock-exchange-data?select=indexProcessed.csv
+# 14 stock exchanges since 1966 and their (almost) daily value.
+
+### Step 3
+
+## Problem
+# Can a correlation between the Big Mac Index and the USA's past/current economic health be used
+# to predict the future economic health in the USA?
+
+## Addressing The Problem
+# The analysis will be below in a subsection labeled Analysis.
+# However, I looked at the differing rates for the BMI, as well as NYA and compared
+# them to the expected growth of the GEP. I applied logistic modeling
+# to provide best fit lines, however I feel that best fit lines aren't the best
+# tool here. I think providing a model that is based on a starting point rather than
+# a best fit slope would've provided a more accurate forecast.
+
+### Analysis
+## Set the working directory to the root of your DSC 520 directory
+# used Mac formatting on this one since I'm on a business trip
+setwd("~/Documents/GitHub/dsc520/")
+
+# pull in the data sets
+big_mac <- read.csv("data/big-mac-source-data.csv")
+gep_data <- read.csv("data/GEPData.csv")
+stock_index <- read.csv("data/indexProcessed.csv")
+
+# time for some spring cleaning. Focus on 2000 and beyond in the USA.
+# clean out any unneeded columns
+nya.subset <- subset(stock_index, Index == "NYA")
+nya.subset <- subset(nya.subset, Date >= "2000-04-01")
+nya.subset <- subset(nya.subset, Date <= "2021-01-01")
+nya.subset <- subset(nya.subset, select = -c(Volume, Open, High, Low, Adj.Close, CloseUSD))
+
+big_mac.subset <- subset(big_mac, iso_a3 == "USA")
+big_mac.subset <- subset(big_mac.subset, date <= "2021-01-01")
+big_mac.subset <- subset(big_mac.subset, select = -c(name, iso_a3, dollar_ex, GDP_dollar))
+
+gep.subset <- subset(gep_data, Country.Code == "USA")
+gep.subset <- subset(gep.subset, select = -c(Country.Name, Indicator.Name, Indicator.Code, X))
+
+# let's turn the date strings to a date data form
+big_mac.subset$date <- as.Date(big_mac.subset$date)
+nya.subset$Date <- as.Date(nya.subset$Date)
+
+# Let's provide headers to show the gist of the data
+head(nya.subset)
+head(big_mac.subset)
+head(gep.subset)
+
+# let's plot the BMI and see if we can get a best fit line
+ggplot(big_mac.subset, aes(x=date, y=local_price)) + 
+  geom_point() + geom_smooth(method=lm, se=FALSE)
+
+# let's plot the exchange as well for a best fit line
+ggplot(nya.subset, aes(x=Date, y=Close)) + 
+  geom_point() + geom_smooth(method=lm, se=FALSE)
+
+# let's grab the 2019 and 2020 growth for both BMI and the GEP
+big_mac.subset
+gep.subset
+
+# The start of 2019 is $5.58, and we are expecting a 2.3% growth
+# let's do some quick maths.
+big_mac.growth.expected.2019 <- 5.58 * 1.023
+big_mac.growth.expected.2019
+# $5.71. This is the middle point between mid 2019 and end of 2019.
+
+# let's compare the actual change for 2019
+big_mac.growth.actual.2019 <- (5.67 / 5.58) - 1
+big_mac.growth.actual.2019 # growth of 1.6%
+
+# The start of 2020 we see the price was $5.67
+big_mac.growth.expected.2020 <- 5.67 * .966
+big_mac.growth.expected.2020 
+# $5.47. This is a larger drop than what we experienced for big mac prices
+
+# let's compare the actual change for 2020
+big_mac.growth.actual.2020 <- (5.66 / 5.67) - 1
+big_mac.growth.actual.2020 # decline of .002%
+
+# If we take the expected 2019 and follow the GEP trend, we can see if it's closer
+big_mac.growth.expected.2year <- big_mac.growth.expected.2019 * .966
+big_mac.growth.expected.2year
+# $5.51, 4 cents closer but still 16 cents off what we actually saw.
+
+# let's compare the actual change for 2019-2021
+big_mac.growth.actual.2year <- (5.66 / 5.58) - 1
+big_mac.growth.actual.2year # growth of .014% over 2 years
+
+
+# Already I can tell that BMI doesn't follow the exact numbers of the GEP
+# However, they do tend to follow the trends pretty well. 
+
+# let's subset some 2019 nya data
+nya.subset.2019 <- subset(nya.subset, Date >= "2019-01-01")
+nya.subset.2019 <- subset(nya.subset.2019, Date <= "2020-01-01")
+
+# let's grab the start and end values
+head(nya.subset.2019) # 11383.53
+tail(nya.subset.2019) # 13913.03
+
+# What was the growth for the year of 2019?
+nya.actual.growth.2019 <- (13913.03 / 11383.53) - 1
+nya.actual.growth.2019 # actual growth was 22%.
+
+# let's subset some 2020 nya data
+nya.subset.2020 <- subset(nya.subset, Date >= "2020-01-01")
+nya.subset.2020 <- subset(nya.subset.2020, Date <= "2021-01-01")
+
+# let's grab the start and end values
+head(nya.subset.2020) # 14002.49
+tail(nya.subset.2020) # 14524.80
+
+# What was the growth for the year of 2020?
+nya.actual.growth.2020 <- (14524.80 / 14002.49) - 1
+nya.actual.growth.2020 # actual growth was 3.7%.
+
+nya.actual.growth.2year <- (14524.80 / 11383.53) - 1
+nya.actual.growth.2year # actual growth was 27.6%
+
+# Let's do some projected growth of the GEP
+nya.projected.growth.2019 <- 11383.53 * 1.023
+nya.projected.growth.2019 # 11645.35
+
+nya.projected.growth.2020 <- nya.projected.growth.2019 * .966
+nya.projected.growth.2020 # 11249.41
+
+nya.projected.growth.2year <- (11249.41 / 11383.53) - 1
+nya.projected.growth.2year # -0.011% growth
+
+# The growth of the NYA shows that it doesn't follow the GEP. However, the down
+# year (2020) does show a significantly decreased growth rate.
+
+## Implications
+# Altogether, the GEP appears to show a good trend line, however there are other
+# factors in the BMI and NYA that factor into their pricepoints. The difficulty
+# is to show a 1:1 trend between the three.
+
+# It does go to show, that if the GEP forecasts a decline, growth CAN still occur.
+# Forecasts of a decline in growth in the short term shouldn't be used as a panic
+# mode for economic health. Just 2 year analysis showed that the NYA grew 27.6%
+# when the GEP forecast didn't support that initial thought.
+
+# Ingesting the appropriate data will help make the best appropriate investment decisions
+# while relying on a single indicator is a poor decision.
+
+## Limitations
+# Similar to implications, I would need to identify more data sets to look for more
+# trends. The stock market and price of a Big Mac have way too many variables for a
+# simple 3 data set analysis.
+
+## Closing Remarks
+# The BMI is less of an indicator for economic health, and more of a result. As 
+# the price of materials increase, the price of the Big Mac will increase. The GEP
+# can also be used as a good indicator for how the NYA will move. The NYA will move
+# much more sporadically due to the various elements that go into it.
+
+```
