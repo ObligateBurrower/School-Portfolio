@@ -21,7 +21,7 @@ I created a [text based app to get current and forecast weather conditions](open
 
 
 # About
-My name is Justin Madsen, and am currently a Data Science student at Bellevue University. I'm 29, and work for Science Applications International Corporation to help build a next generation weather model.
+My name is Justin, and am currently a Data Science student at Bellevue University. I'm 29, and work for Science Applications International Corporation to help build a next generation weather model. I live with a cat, 4 tarantulas and 2 scorpions. I'm an avid gamer and play alot of guitar for someone as bad at it as I am.
 
 If you have any questions, you can reach me at [my business email](SaiSolutions@pm.me).
 
