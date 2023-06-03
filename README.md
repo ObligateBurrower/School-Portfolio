@@ -7,13 +7,13 @@ Here's a [model](DSC550_Term Project_jMadsen.pdf) I built to determine the likel
 
 Here's an [analysis](Big_Mac_Index_Analysis.Rmd) on US market trends vs the price of a Big Mac.
 
-I developed a fairly basic [Ethereum price forecast tool](Ethereum_Forecast.ipynb) using FB Prophet.
+I developed a fairly basic [Ethereum price forecast tool](Ethereum Forecast White Paper.pdf) using FB Prophet.
 
 Here's an [analysis on how trade volume impacts the price of the US Stock Exchange](NYA_Statistics_Analysis.Rmd).
 
 I did some [modeling on house market prices](Housing_Market_Data_Preparation.md) to see what factors of a home affect the price the most.
 
-I built a [loot generator](OSRS_Loot_Generator.md) for the game, Old School Runescape in preparation for a future project of mine.
+I built a [loot generator](DSC680_Proj2-jMadsen.pdf) for the game, Old School Runescape in preparation for a future project of mine.
 
 Here is a model to predict [song popularity](Spotify_Popularity_Modelling.md) on Spotify based on several factors from the platform.
 
