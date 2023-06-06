@@ -3,11 +3,11 @@ This is a repository of all the final projects from my Master's program.
 
 I will continue to add to this as the program continues and I develop as a programmer/data scientist.
 
-Here's a [model](DSC550_Term Project_jMadsen.pdf) I built to determine the likelihood someone would take out a second bank loan.
+Here's a [model](Bank_Loan_Modelling.md) I built to determine the likelihood someone would take out a second bank loan.
 
 Here's an [analysis](Big_Mac_Index_Analysis.Rmd) on US market trends vs the price of a Big Mac.
 
-I developed a fairly basic [Ethereum price forecast tool](Ethereum Forecast White Paper.pdf) using FB Prophet.
+I developed a fairly basic [Ethereum price forecast tool](Ethereum_Forecast.ipynb) using FB Prophet.
 
 Here's an [analysis on how trade volume impacts the price of the US Stock Exchange](NYA_Statistics_Analysis.Rmd).
 
