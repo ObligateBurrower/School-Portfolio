@@ -21,8 +21,8 @@ I created a [text based app to get current and forecast weather conditions](open
 
 
 # About
-My name is Justin, and am currently a Data Science student at Bellevue University. I'm 29, and work for Science Applications International Corporation to help build a next generation weather model. I live with a cat, 4 tarantulas and 2 scorpions. I'm an avid gamer and play alot of guitar for someone as bad at it as I am.
+My name is Justin, and am currently a Data Scientist. I spend most of my free time playing games, hanging out with my cat or getting annoyed at tasks enough to figure out a way to automate them.
 
 If you have any questions, you can reach me at [my business email](SaiSolutions@pm.me).
 
-If you are having trouble viewing any of these projects on the Github Page, you can click [here](https://github.com/SaiSolutions-Py/SaiSolutions-Py.github.io/tree/main) to view the projects within Github directly.
+If you are having trouble viewing any of these projects on the Github Page, you can click [here](https://github.com/SaiSolutions-Py/School-Portfolio/tree/main) to view the projects within Github directly.
