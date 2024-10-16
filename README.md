@@ -25,4 +25,4 @@ My name is Justin, and am currently a Data Scientist. I spend most of my free ti
 
 If you have any questions, you can reach me at [my business email](SaiSolutions@pm.me).
 
-If you are having trouble viewing any of these projects on the Github Page, you can click [here](https://github.com/SaiSolutions-Py/School-Portfolio/tree/main) to view the projects within Github directly.
+If you are having trouble viewing any of these projects on the Github Page, you can click [here](https://github.com/ObligateBurrower/School-Portfolio) to view the projects within Github directly.
